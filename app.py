@@ -25,6 +25,12 @@ PASSES_DIR = 'passes'
 os.makedirs(QRS_DIR, exist_ok=True)
 os.makedirs(PASSES_DIR, exist_ok=True)
 
+# --- Create Database Tables ---
+# This block will run once when the app starts, ensuring tables exist.
+# It's safe to run on every start because create_all() doesn't re-create existing tables.
+with app.app_context():
+    db.create_all()
+
 
 # --- PDF Generation Helper ---
 def _create_qr_pdf(user_name, qr_code, qr_img_path):
@@ -131,9 +137,6 @@ def checkin(codigo):
 
 # --- Main Execution ---
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-    
     url = "http://127.0.0.1:5001/"
     print("="*50)
     print(f"Servidor iniciado. Abre tu navegador y ve a: {url}")
